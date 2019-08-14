@@ -1,4 +1,5 @@
 # Scalable Graph Clustering
+https://link.springer.com/referenceworkentry/10.1007/978-1-4614-7163-9_110185-1
 ## Background
 * Graph Clustering problem is traditionally related to the graph partitioning problem. The goal is to find clusters that minimize the numbers of edges that bridge clusters. But it has drawbacks that there is no guarantee of the optimality of the partitioning result.
 * So it comes:
