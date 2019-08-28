@@ -74,3 +74,64 @@ $$Q=\sum_{C_u\in{C}}\{{\frac{e_{uu}}{2m}-(\frac{a_u}{2m})^2}\}$$
 * Shiokawa's solutioin:  
   *incremental aggregation algorithm*  
   to be effective, they use three techs: incremental aggretion, incremental pruning, efficient nodes ordering.
+#### 2.3 to summerize
+  * modularity-based method
+    * handle large-scale graphs
+    * widely used
+    * cannot identify hubs and outliers in graphs. 
+    * not a scale-invariant measure
+    * difficult to find small clusters in large-scale graphs
+    * fail to fully reproduce the ground-truth which is known as the *resolution limit* of modularity.
+### 3. Structual Similarity Based Algorithms
+  * resolution limit of modularity
+  * main ideas: if adjacent nodes are densely connected to each other, they should be assigned to the same cluster. They can also find special role nodes, hubs and outliers which are not belong to any clusters to achieve mote accurate results.
+  * to evaluate the density of adjacent nodes, *structual modularuty* is proposed: 
+  $$\sigma(u,v)=\frac{|N[u]\bigcap N[v]|}{\sqrt{|N[u]||N[v]|}}$$
+  where $N[u]=\{v \in V | (u,v) \in E\} \bigcup \{u\}$
+  * main task is to find all clusters, hubs and outliers from the graph based on the equation above and user-specified parameters. 
+#### 3.1 Top-down method
+  * *DHSSACN*:  
+      iteratively removes edges between nodes in the ascending order of the structual similarity of the node. The graph is divided into disconnected components by the removal of edges.   
+      it produces a dendrogram(树状) showing the hierarchial structure of the clusters.
+  * requires high computaional cost for clustering because it iteratively computes the structual similarity for all edges.
+  * diffcult to apply DHSCAN to large scale graphs.  
+#### 3.2 Structual Similairty-Based Modilairty $Q_s$
+  * $IS_u$: the sum of the structual similarity of the nodes within cluster $C_u$
+  * $DS_u$: the sum of the structual similarity between nodes in cluster $C_u$ and any nodes in the graph
+  * $TS$: the total structual similarity of any adjacent nodes in the graph
+  * the structual similarity based modularity score of the clustering result: 
+  $$Q_s = \sum_{C_u\in C}\{\frac{IS_u}{TS}-(\frac{DS_u}{TS})^2\}$$ 
+  the quality of $Q_s$ is better than using modularity based algorithms.
+
+#### 3.3 Bottom-up method
+* to be more effective without losing quality
+* *SCAN*, the most popular method based on the structual similarity, is an extension of a traditional density-based clustering method, *DBSCAN*. This algorithm can find clusters as well as hubs and outliers in a graph by specifying two parameters $\epsilon$ and $\mu$. For finding clusters, SCAN first extracts seeds of clusters called *cores* from the graph.
+#### 3.4 Cores
+* $N_{\epsilon}[u]=\{v \in V | \sigma(u,v)\ge\epsilon\}$, $\epsilon$ and $\mu$ be the user-specified parameters
+* A node $u$ is a core only if $|N_{\epsilon}[u]|\ge\mu$
+* Once SCAN determines node u as a core, it assigns all nodes in $N_\epsilon[u]$ to the same cluster of a core. 
+* parameter-free methods *SHRINK* and *gSkeletonClu*. SHRINK shares the advantages of structual similarity and modularity-based methods. They are user-friendly algorithm since they don't require user-specified parameters. And the clustering quality of them is better than that of SCAN
+* LinkSCAN uses SCAN to find overlapping communities from graphs.
+  * one of the most effective methods for structual similarity-based clustering.
+  * degrades the quality of clustering results
+* SCAN++
+  * SCAN++ is based on a property of real-worldgraphs:if node u is two hops away from node v,their structural  neighborhoods,  N[u]and N[v],are likely to share large portion of nodes.
+  * new data structure: DTAR
+## Key Applications
+### Information Networks
+  * market analysis
+  * infrastructure management
+  * network topology design
+  * wireless and hoc networks
+  * sensor networks
+### Social Networks
+  * social trends
+  * social behavior
+  * information diffusion process
+### Biological Networks
+  * transcriptional modules
+  * protein complexes
+  * gene functional groups
+  * signaling pathways
+## Future Directions
+  * structual similarity based method now requires high computational cost and is still difficult to find clusters to find cluster from billion-nodes graphs. So efficient clustering methods for structural similarity-based algorithms is one of the important future works.
